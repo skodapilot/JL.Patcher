@@ -1,14 +1,18 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text;
 using Spectre.Console;
 
 const string name = "J-link.patcher";
+
+Console.OutputEncoding = Encoding.UTF8;
 
 Console.Title = name;
 Console.ResetColor();
 Console.Clear();
 
 Environment.ExitCode = -1;
+
 
 var header = new Rule
 {
@@ -18,15 +22,25 @@ var header = new Rule
 header.RuleStyle("green");
 AnsiConsole.Write(header);
 
-var input = AnsiConsole.Prompt(
-    new TextPrompt<string>("Enter SN:")
+var origSn = AnsiConsole.Prompt(
+    new TextPrompt<string>("Orig SN:")
         .DefaultValue("941000024")
         .Validate(s => int.TryParse(s, out _)
             ? ValidationResult.Success()
             : ValidationResult.Error("Only digits are allowed!"))
 );
 
-int sn = int.Parse(input);
+int sn = int.Parse(origSn);
+
+var fakeSn = AnsiConsole.Prompt(
+    new TextPrompt<string>("Fake SN:")
+        .DefaultValue("123456")
+        .Validate(s => int.TryParse(s, out _)
+            ? ValidationResult.Success()
+            : ValidationResult.Error("Only digits are allowed!"))
+);
+
+int fsn = int.Parse(fakeSn);
 
 var targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 {
@@ -39,7 +53,7 @@ var pending = new ConcurrentStack<string>();
 pending.Push(@"c:\");
 
 await AnsiConsole.Status()
-    .Spinner(Spinner.Known.Aesthetic)
+    .Spinner(Spinner.Known.Default)
     .StartAsync("Scanning for DLL...", ctx =>
     {
         Parallel.ForEach(
@@ -130,7 +144,7 @@ bool PatchDll(string path)
     }
 
 
-    var newsn = BitConverter.GetBytes(123456);
+    var newsn = BitConverter.GetBytes(fsn);
 
     foreach (var offset in positions)
     {
