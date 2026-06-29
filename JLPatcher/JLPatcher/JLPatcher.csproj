@@ -9,12 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Costura.Fody" Version="6.0.0">
+      <PackageReference Include="Costura.Fody" Version="6.2.0">
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
-      <PackageReference Include="Spectre.Console" Version="0.54.0" />
-      <PackageReference Include="Spectre.Console.Extensions.Progress" Version="1.0.0" />
-      <PackageReference Include="Spectre.Console.Extensions.Table" Version="1.0.0" />
+      <PackageReference Include="Spectre.Console" Version="0.57.1" />
+      <PackageReference Include="Spectre.Console.Extensions.Progress" Version="1.0.2" />
+      <PackageReference Include="Spectre.Console.Extensions.Table" Version="1.0.2" />
     </ItemGroup>
 
 </Project>
